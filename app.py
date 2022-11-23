@@ -3,7 +3,7 @@ import random
 import json
 from types import SimpleNamespace
 import numpy as np
-from keras import load_model
+from keras.models import load_model
 from PIL import Image
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy

@@ -1,5 +1,6 @@
 import io
 import random
+import base64
 import json
 from types import SimpleNamespace
 import numpy as np
@@ -9,26 +10,30 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 
-model = load_model('model.h5')
+red_model = load_model('model-redsoil-v2.h5')
+black_model = load_model('model-redsoil-v2.h5')
+alluvial_model = load_model('model-redsoil-v2.h5')
 
 #Assume you received this JSON response
 cropJsonData = '{"crops": [{ "name": "Rice", "days": 100, "maxmoisture": 80, "minmoisture":40 }, { "name": "Sunflower", "days": 100, "maxmoisture": 90, "minmoisture":60 }, { "name": "Tea", "days": 100, "maxmoisture": 60, "minmoisture":50 }, { "name": "Wheat", "days": 100, "maxmoisture": 70, "minmoisture":40 }]}'
 
 # Parse JSON into an object with attributes corresponding to dict keys.
 parsedCropsData = json.loads(cropJsonData, object_hook=lambda d: SimpleNamespace(**d))
-print(parsedCropsData.crops[0].name, parsedCropsData.crops[0].days)
 
 def prepare_image(img):
     img = Image.open(io.BytesIO(img))
     img = img.resize((224, 224))
     img = np.array(img)
-    img = np.expand_dims(img, 0)
+    img = img.reshape((-1,224,224,3))
     return img
 
-
-def predict_result(img):
-    return model.predict(img)
-
+def predict_result(img, soilType):
+    if soilType == "red":
+        return red_model.predict(img)
+    if soilType == "black":
+        return black_model.predict(img)
+    if soilType == "alluvial":
+        return alluvial_model.predict(img)
 
 app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///crops.sqlite3'
@@ -49,6 +54,8 @@ def __init__(self, name, days, maxmoisture, minmoisture):
    self.maxmoisture = maxmoisture
    self.minmoisture = minmoisture
 
+def find_soil_type(latitude, longitude):
+    pass
 
 @app.route('/predict', methods=['POST'])
 def infer_image():
@@ -66,13 +73,14 @@ def infer_image():
         return
 
     img_bytes = file.read()
-    #img = prepare_image(img_bytes)
+    img = prepare_image(img_bytes)
+    value = predict_result(img, soil_type)
+    a = np.argmax(value)
 
-    #return jsonify(prediction=predict_result(img))
-    return {"moisture":str(100*random.random())}
+    return {"moisture":str(a*10)}
 
 @app.route('/eligible-crops', methods=['GET'])
-def index():
+def eligible_crops():
     eligibleCrops = []
     soilMoisture = request.args.get('soilMoisture')
 
@@ -88,6 +96,20 @@ def index():
             eligibleCrops.append({"name":_crops.name, "days": _crops.days, "maxmoisture": _crops.maxmoisture, "minmoisture": _crops.minmoisture})
     
     return jsonify(eligibleCrops)
+
+@app.route('/location-soil-type', methods=['GET'])
+def location_mapping():
+    latitude = request.args.get('lat')
+    longitude = request.args.get('lng')
+
+    if latitude or longitude:
+        return "Please try again! Wrong coordinates are passed!"
+
+    soilType = find_soil_type(latitude, longitude)
+    
+    soilType = "Black"
+
+    return jsonify({"soil-type": soilType})
     
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

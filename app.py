@@ -3,13 +3,13 @@ import random
 import json
 from types import SimpleNamespace
 import numpy as np
-import tensorflow as tf
+from keras import load_model
 from PIL import Image
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 
-model = tf.keras.models.load_model('model.h5')
+model = load_model('model.h5')
 
 #Assume you received this JSON response
 cropJsonData = '{"crops": [{ "name": "Rice", "days": 100, "maxmoisture": 80, "minmoisture":40 }, { "name": "Sunflower", "days": 100, "maxmoisture": 90, "minmoisture":60 }, { "name": "Tea", "days": 100, "maxmoisture": 60, "minmoisture":50 }, { "name": "Wheat", "days": 100, "maxmoisture": 70, "minmoisture":40 }]}'
@@ -81,8 +81,9 @@ def index():
 
     soilMoisture = int(soilMoisture)
 
+    print(crops.query.filter_by(maxmoisture < 90).all())
+
     for _crops in parsedCropsData.crops:
-        print(_crops)
         if soilMoisture <=_crops.maxmoisture   and soilMoisture >= _crops.minmoisture:
             eligibleCrops.append({"name":_crops.name, "days": _crops.days, "maxmoisture": _crops.maxmoisture, "minmoisture": _crops.minmoisture})
     

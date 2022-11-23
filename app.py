@@ -81,7 +81,7 @@ def index():
 
     soilMoisture = int(soilMoisture)
 
-    print(crops.query.filter_by(maxmoisture < 90).all())
+    #print(crops.query.filter_by(maxmoisture < 90).all())
 
     for _crops in parsedCropsData.crops:
         if soilMoisture <=_crops.maxmoisture   and soilMoisture >= _crops.minmoisture:

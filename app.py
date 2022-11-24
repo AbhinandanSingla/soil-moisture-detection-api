@@ -180,7 +180,7 @@ def futute_weather_predict():
         result = predict_future_moisture(soil_type, temp_moisture, forecast["day"]["avgtemp_c"], forecast["day"]["condition"]["text"], forecast["day"]["totalprecip_mm"])
         temp_moisture = result["moisture"]
         result["action"] = "You have to irrigate the plants!!"
-        result["required_irrigation"] = True
+        result["required_irrigation"] = False
 
         for crop in crops:
             if str(crop.name) == str(crop_name):

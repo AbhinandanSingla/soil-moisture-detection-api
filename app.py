@@ -178,12 +178,19 @@ def futute_weather_predict():
         for crop in crops:
             if str(crop.name) == str(crop_name):
                 if(crop.minmoisture >= temp_moisture):
-                    result["action"]= "You have to irrigate the plants!!"
+                    result["action"] = "You have to irrigate the plants!!"
+                    result["required_irrigation"] = True
                 else:
                     result["action"]= "You dont have to irrigate the plants!!"
+                    result["required_irrigation"] = False
 
+        result["temp"] = forecast["day"]["avgtemp_c"]
+        result["date"] = forecast["date"]
+        result["precip"] = forecast["day"]["totalprecip_mm"]
         moisture_list.append(result)
         print(result)
+
+    
 
     return(moisture_list)
 

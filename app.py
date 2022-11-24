@@ -104,6 +104,7 @@ def predict_future_moisture(soil_type, current_moisture, average_temp_day, forec
         else:
             result["forecast"] = "Humid"
             result["description"] = "In humid climate the soil mositure is unlikely to change other than the uppper soil"
+            soil_moisture-=2
 
         result["moisture"] = soil_moisture
         return result
@@ -180,7 +181,7 @@ def futute_weather_predict():
         temp_moisture = result["moisture"]
         result["action"] = "You have to irrigate the plants!!"
         result["required_irrigation"] = True
-        
+
         for crop in crops:
             if str(crop.name) == str(crop_name):
                 if(crop.minmoisture >= temp_moisture):

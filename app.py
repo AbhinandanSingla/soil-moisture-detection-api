@@ -161,8 +161,11 @@ def futute_weather_predict():
     soil_type = request.args.get('soil_type')
     current_moisture = request.args.get('moisture')
     crop_name = request.args.get('crop_name')
+    lat = request.args.get('lat') or "48.8567"
+    lng = request.args.get('lng') or "2.3508"
 
-    api_url = "http://api.weatherapi.com/v1/forecast.json?key=b26d8ccc756143b7be9181317222311&q=48.8567,2.3508&days=10"
+
+    api_url = "http://api.weatherapi.com/v1/forecast.json?key=b26d8ccc756143b7be9181317222311&q=" + lat + "," + lng + "&days=5"
     response = urllib.request.urlopen(api_url)
     data = response.read()
     dict = json.loads(data)

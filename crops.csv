@@ -1,36 +1,36 @@
-name,soil_type,minmoisture,maxmoisture,days
-Cotton,Black,60,80,25
-Cotton,red,70,85,30
-Wheat,alluvial,40,60,45
-Wheat,black,30,60,45
-Rice,black,60,90,70
-Rice,alluvial,65,95,70
-Black dal,black,40,60,30
-Wheat,Red,50,75,45
-Rice,Red,65,90,70
-SunFlower,black,60,80,30
-Green Dal,black,40,65,20
-Calibrachoa,black,60,80,20
-Caladium,alluvial,60,80,20
-Dahlia,black,20,95,20
-Egyptian Papyrus,alluvial,60,80,20
-Cyperus Papyrus,alluvial,27,80,20
-False Cypress,black,60,80,20
-Chamaecyparis,alluvial,20,95,20
-False Sunflower,black,60,80,30
-Heliopsis Helianthoides,Red,27,80,40
-Açaí,alluvial,27,80,25
-Cress,alluvial,30,75,35
-Artichoke,Blank,45,80,30
-Lettuce,alluvial,40,85,20
-Garlic,Red,50,90,45
-Mulberry,Red,60,80,35
-Chicory,alluvial,30,70,30
-Mate herb,alluvial,27,95,25
-Spinach,alluvial,54,80,35
-jabuticabeira,Blank,43,70,40
-Laurel,alluvial,34,65,45
-heck,Red,27,60,20
-Cucumber,black,47,90,25
-Radish,alluvial,50,70,30
-Tomato,black,60,80,30
+id,name,soil_type,minmoisture,maxmoisture,days
+1,Cotton,Black,60,80,25
+2,Cotton,red,70,85,30
+3,Wheat,alluvial,40,60,45
+4,Wheat,black,30,60,45
+5,Rice,black,60,90,70
+6,Rice,alluvial,65,95,70
+7,Black dal,black,40,60,30
+8,Wheat,Red,50,75,45
+9,Rice,Red,65,90,70
+10,SunFlower,black,60,80,30
+11,Green Dal,black,40,65,20
+12,Calibrachoa,black,60,80,20
+13,Caladium,alluvial,60,80,20
+14,Dahlia,black,20,95,20
+15,Egyptian Papyrus,Red,60,80,20
+16,Cyperus Papyrus,alluvial,27,80,20
+17,False Cypress,black,60,80,20
+18,Chamaecyparis,Red,20,95,20
+19,False Sunflower,black,60,80,30
+20,Heliopsis Helianthoides,Red,27,80,40
+21,Açaí,alluvial,27,80,25
+22,Cress,alluvial,30,75,35
+23,Artichoke,Blank,45,80,30
+24,Lettuce,alluvial,40,85,20
+25,Garlic,Red,50,90,45
+26,Mulberry,Red,60,80,35
+27,Chicory,Red,30,70,30
+28,Mate herb,Red,27,95,25
+29,Spinach,Red,54,80,35
+30,jabuticabeira,Blank,43,70,40
+31,Laurel,alluvial,34,65,45
+32,heck,Red,27,60,20
+33,Cucumber,black,47,90,25
+34,Radish,Red,50,70,30
+35,Tomato,black,60,80,30

@@ -28,7 +28,6 @@ cropsCSV = pd.read_csv('crops.csv')
 
 # write the data to a sqlite table
 cropsCSV.to_sql('crops', conn, if_exists='append', index = False)
-print(cropsCSV)
 #Assume you received this JSON response
 #cropJsonData = '{"crops": [{ "name": "Rice", "days": 100, "maxmoisture": 80, "minmoisture":40 }, { "name": "Sunflower", "days": 100, "maxmoisture": 90, "minmoisture":60 }, { "name": "Tea", "days": 100, "maxmoisture": 60, "minmoisture":50 }, { "name": "Wheat", "days": 100, "maxmoisture": 70, "minmoisture":40 }]}'
 
@@ -57,6 +56,8 @@ def predict_future_moisture(soil_type, current_moisture, average_temp_day, forec
         avgtemp_c = average_temp_day
         text = forecast # "clear"
         totalprecip_mm = int(total_precip_day)  # 5
+
+        result = {}
 
         if("sunny" == text or "clear" in text):
             if avgtemp_c<=10:
@@ -88,20 +89,24 @@ def predict_future_moisture(soil_type, current_moisture, average_temp_day, forec
 
         elif("rain" in text):
             if(totalprecip_mm >=0 and totalprecip_mm<=2.5):
-                print("Slight rain")
+                result["forecast"] = "Slight rain"
+                result["description"] = "Slight rain"
                 soil_moisture += (totalprecip_mm/25)*100
             elif(totalprecip_mm>= 2.6 and totalprecip_mm<=7.8):
-                print("Medium rain")
+                result["forecast"] = "Medium rain"
+                result["description"] = "Medium rain"
                 soil_moisture += (totalprecip_mm/25)*100
             else:
-                print("Heavy Rain")
+                result["forecast"] = "Heavy rain"
+                result["description"] = "Heavy rain"
                 soil_moisture += (totalprecip_mm/25)*100 
 
         else:
-            print("Humid")
-            print("In humid climate the soil mositure is unlikely to change other than the uppper soil")
+            result["forecast"] = "Humid"
+            result["description"] = "In humid climate the soil mositure is unlikely to change other than the uppper soil"
 
-        return soil_moisture
+        result["moisture"] = soil_moisture
+        return result
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
@@ -111,13 +116,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Crops(db.Model):
-   name = db.Column(db.String(100), primary_key = True)
+   id = db.Column(db.Integer, primary_key = True)
+   name = db.Column(db.String(100))
    days = db.Column(db.String(5))
    soil_type = db.Column(db.String(10))
    maxmoisture = db.Column(db.String(3))
    minmoisture = db.Column(db.String(3))
 
-def __init__(self, name, days, soil_type, maxmoisture, minmoisture):
+def __init__(self, id, name, days, soil_type, maxmoisture, minmoisture):
+        self.id = id
         self.name = name
         self.days = days
         self.soil_type = soil_type
@@ -162,30 +169,24 @@ def futute_weather_predict():
 
     moisture_list = []
     temp_moisture = current_moisture
-    for forecast in dict["forecast"]["forecastday"]:
-        value = predict_future_moisture(soil_type, temp_moisture, forecast["day"]["avgtemp_c"], forecast["day"]["condition"]["text"], forecast["day"]["totalprecip_mm"])
-        print(value)
-        temp_moisture = value
-        moisture_list.append(value)
-        
-    minimum_moisture = min(moisture_list)
 
     crops = Crops.query.all()
-    crop_minmoisture = 0
 
-    for crop in crops:
-        if crop.name == crop_name and crop.soil_type == soil_type:
-            crop_minmoisture = crop.minmoisture
-            print(crop.minmoisture)
-            print(crop_minmoisture)
+    for forecast in dict["forecast"]["forecastday"]:
+        result = predict_future_moisture(soil_type, temp_moisture, forecast["day"]["avgtemp_c"], forecast["day"]["condition"]["text"], forecast["day"]["totalprecip_mm"])
+        temp_moisture = result["moisture"]
+        for crop in crops:
+            if crop.name == crop_name and crop.soil_type == soil_type:
+                if(crop.minmoisture >= temp_moisture):
+                    result["action"]= "You have to irrigate the plants!!"
+                else:
+                    result["action"]= "You dont have to irrigate the plants!!"
+                break
 
-            break
+        moisture_list.append(result)
+        print(result)
 
-
-    if crop_minmoisture <= minimum_moisture:
-        return jsonify({"result": "No need to irrigate the plants"})
-    else:
-        return jsonify({"result": "You have to irrigate the plants"})
+    return(moisture_list)
 
 @app.route('/eligible-crops', methods=['GET'])
 def eligible_crops():

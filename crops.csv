@@ -1,0 +1,36 @@
+name,soil_type,minmoisture,maxmoisture,days
+Cotton,Black,60,80,25
+Cotton,red,70,85,30
+Wheat,alluvial,40,60,45
+Wheat,black,30,60,45
+Rice,black,60,90,70
+Rice,alluvial,65,95,70
+Black dal,black,40,60,30
+Wheat,Red,50,75,45
+Rice,Red,65,90,70
+SunFlower,black,60,80,30
+Green Dal,black,40,65,20
+Calibrachoa,black,60,80,20
+Caladium,alluvial,60,80,20
+Dahlia,black,20,95,20
+Egyptian Papyrus,alluvial,60,80,20
+Cyperus Papyrus,alluvial,27,80,20
+False Cypress,black,60,80,20
+Chamaecyparis,alluvial,20,95,20
+False Sunflower,black,60,80,30
+Heliopsis Helianthoides,Red,27,80,40
+Açaí,alluvial,27,80,25
+Cress,alluvial,30,75,35
+Artichoke,Blank,45,80,30
+Lettuce,alluvial,40,85,20
+Garlic,Red,50,90,45
+Mulberry,Red,60,80,35
+Chicory,alluvial,30,70,30
+Mate herb,alluvial,27,95,25
+Spinach,alluvial,54,80,35
+jabuticabeira,Blank,43,70,40
+Laurel,alluvial,34,65,45
+heck,Red,27,60,20
+Cucumber,black,47,90,25
+Radish,alluvial,50,70,30
+Tomato,black,60,80,30

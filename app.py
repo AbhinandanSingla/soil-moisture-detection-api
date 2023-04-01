@@ -223,10 +223,12 @@ def eligible_crops():
     soilMoisture = int(soilMoisture)
     print(soilMoisture)
     crops = Crops.query.all()
-    print(crops)
+    print(crops[0].name)
     for _crops in crops:
-        if (soilMoisture <= int(_crops.maxmoisture) and soilMoisture >= int(
+        if (int(_crops.maxmoisture) >= soilMoisture >= int(
                 _crops.minmoisture)) and soilType == _crops.soil_type:
+            print(_crops.name)
+            print(_crops.soil_type)
             eligibleCrops.append({"name": _crops.name, "soil_type": _crops.soil_type, "days": _crops.days,
                                   "maxmoisture": _crops.maxmoisture, "minmoisture": _crops.minmoisture})
     print(eligibleCrops)

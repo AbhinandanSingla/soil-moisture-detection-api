@@ -1,13 +1,15 @@
 import io
+import json
 import os
-import pandas as pd
-import urllib.request, json
-import numpy as np
-from keras.models import load_model
-from PIL import Image
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 import sqlite3
+import urllib.request
+
+import numpy as np
+import pandas as pd
+from PIL import Image
+from flask import Flask, jsonify, request, render_template
+from flask_sqlalchemy import SQLAlchemy
+from keras.models import load_model
 
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
@@ -136,6 +138,9 @@ def __init__(self, id, name, days, soil_type, maxmoisture, minmoisture):
 def find_soil_type(latitude, longitude):
     pass
 
+@app.route('/')
+def index():
+    return render_template("index.html")
 
 @app.route('/predict', methods=['POST'])
 def infer_image():

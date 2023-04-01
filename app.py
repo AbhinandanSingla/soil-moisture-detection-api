@@ -138,9 +138,11 @@ def __init__(self, id, name, days, soil_type, maxmoisture, minmoisture):
 def find_soil_type(latitude, longitude):
     pass
 
+
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 @app.route('/predict', methods=['POST'])
 def infer_image():

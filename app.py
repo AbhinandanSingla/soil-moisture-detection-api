@@ -115,7 +115,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
+print(db)
 
 class Crops(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -220,8 +220,9 @@ def eligible_crops():
         return "Soil Moisture not found!"
 
     soilMoisture = int(soilMoisture)
+    print(soilMoisture)
     crops = Crops.query.all()
-
+    print(crops)
     for _crops in crops:
         if (soilMoisture <= int(_crops.maxmoisture) and soilMoisture >= int(
                 _crops.minmoisture)) and soilType == _crops.soil_type:

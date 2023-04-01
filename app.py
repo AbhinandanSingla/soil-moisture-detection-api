@@ -117,6 +117,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 print(db)
 
+
 class Crops(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -228,7 +229,7 @@ def eligible_crops():
                 _crops.minmoisture)) and soilType == _crops.soil_type:
             eligibleCrops.append({"name": _crops.name, "soil_type": _crops.soil_type, "days": _crops.days,
                                   "maxmoisture": _crops.maxmoisture, "minmoisture": _crops.minmoisture})
-
+    print(eligibleCrops)
     return jsonify(eligibleCrops)
 
 

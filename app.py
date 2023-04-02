@@ -193,7 +193,7 @@ def plantDisease():
     # value = tomato_disease.predict([img])
     # a = np.argmax(value)
 
-    return a
+    return {"status": str(a)}
 
 
 @app.route('/predict-future-moisture', methods=['GET'])

@@ -1,6 +1,8 @@
 import io
 import json
 import os
+import pickle
+import random
 import sqlite3
 import urllib.request
 
@@ -19,6 +21,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 red_model = load_model('model-redsoil-v3.h5')
 black_model = load_model('model-redsoil-v3.h5')
 alluvial_model = load_model('model-redsoil-v3.h5')
+tomato_disease = pickle.load(open("plantDisease.pkl", 'rb'))
 
 cropsCSV = pd.read_csv('crops.csv')
 
@@ -168,6 +171,31 @@ def infer_image():
     return {"moisture": str(a * 10)}
 
 
+@app.route('/predictPlantDisease', methods=['POST'])
+def plantDisease():
+    plant_type = request.args.get('plant_type')
+
+    if 'file' not in request.files:
+        return "Please try again. The Image doesn't exist"
+    file = request.files.get('file')
+    if not file:
+        return
+    if not plant_type:
+        return "Please try again. The plant type doesn't exist"
+    a = random.randrange(0, 2)
+    #
+    # img_bytes = file.read()
+    # img = Image.open(io.BytesIO(img_bytes))
+    # img = img.resize((112, 112))
+    # img = np.array(img)
+    # img = img.reshape((1, 112, 112,))
+    # print(tomato_disease)
+    # value = tomato_disease.predict([img])
+    # a = np.argmax(value)
+
+    return a
+
+
 @app.route('/predict-future-moisture', methods=['GET'])
 def futute_weather_predict():
     soil_type = request.args.get('soil_type')
@@ -176,8 +204,9 @@ def futute_weather_predict():
     lat = request.args.get('lat') or "48.8567"
     lng = request.args.get('lng') or "2.3508"
 
-    api_url = "http://api.weatherapi.com/v1/forecast.json?key=b26d8ccc756143b7be9181317222311&q=" + lat + "," + lng + "&days=5"
+    api_url = "http://api.weatherapi.com/v1/forecast.json?key=7b6c186be5524809841181242230204&q=" + lat + "," + lng + "&days=5"
     response = urllib.request.urlopen(api_url)
+    print(response)
     data = response.read()
     dict = json.loads(data)
 

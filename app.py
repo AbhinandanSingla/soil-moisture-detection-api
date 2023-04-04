@@ -21,7 +21,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 red_model = load_model('model-redsoil-v3.h5')
 black_model = load_model('model-redsoil-v3.h5')
 alluvial_model = load_model('model-redsoil-v3.h5')
-tomato_disease = pickle.load(open("plantDisease.pkl", 'rb'))
+tomato_disease = load_model("disease-pred.h5")
 
 cropsCSV = pd.read_csv('crops.csv')
 
@@ -182,18 +182,15 @@ def plantDisease():
         return
     if not plant_type:
         return "Please try again. The plant type doesn't exist"
-    a = random.randrange(0, 2)
-    #
-    # img_bytes = file.read()
-    # img = Image.open(io.BytesIO(img_bytes))
-    # img = img.resize((112, 112))
-    # img = np.array(img)
-    # img = img.reshape((1, 112, 112,))
-    # print(tomato_disease)
-    # value = tomato_disease.predict([img])
-    # a = np.argmax(value)
-
-    return {"status": str(a)}
+    img_bytes = file.read()
+    img = Image.open(io.BytesIO(img_bytes))
+    img = img.resize((112, 112))
+    img = np.array(img)
+    img = img.reshape((1, 112, 112,))
+    print(tomato_disease)
+    value = tomato_disease.predict(img)
+    b = np.argmax(value)
+    return {"status": str(b)}
 
 
 @app.route('/predict-future-moisture', methods=['GET'])
